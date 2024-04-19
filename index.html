@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Viewer</title>
+</head>
+<body>
+    <h1>File Viewer</h1>
+    <form id="fileForm" action="/file" method="GET">
+        <input type="text" name="id" placeholder="Enter file ID">
+        <button type="submit">View File</button>
+    </form>
+    <div id="fileContainer"></div>
+
+    <script>
+        document.getElementById('fileForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const fileId = document.querySelector('input[name="id"]').value;
+            const response = await fetch(`/file/${fileId}`);
+            if (response.ok) {
+                const fileBlob = await response.blob();
+                const fileURL = URL.createObjectURL(fileBlob);
+                const fileContainer = document.getElementById('fileContainer');
+                fileContainer.innerHTML = `<iframe src="${fileURL}" width="800" height="600"></iframe>`;
+            } else {
+                alert('File not found');
+            }
+        });
+    </script>
+</body>
+</html>
